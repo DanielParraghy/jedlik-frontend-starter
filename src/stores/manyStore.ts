@@ -2,26 +2,21 @@ import { defineStore } from "pinia";
 import { Notify, Loading } from "quasar";
 import { api } from "src/boot/axios";
 
-import { useAppStore } from "./appStore";
-const appStore = useAppStore();
+//import { useAppStore } from "./appStore";
+//const appStore = useAppStore();
 
 // === INTERFACES ===
 // Convert JSON document to TS Interface quickly: https://transform.tools/json-to-typescript
 
 // Don't forget the question marks (?) after field names!
 export interface IMany {
-  id?: number; // PK
-  categoryId?: number; // FK
-  titleField?: string;
-  descField?: string;
-  dateField?: string;
-  boolField?: boolean;
-  priceField?: number;
-  imgField?: string;
-  category?: {
-    id?: number;
-    categoryNameField?: string;
-  };
+  id?: number;
+  kategoriaId?: number;
+  kategoriaNev?: string;
+  leiras?: string;
+  hirdetesDatuma?: string;
+  tehermentes?: boolean;
+  kepUrl?: string;
 }
 
 interface IState {
@@ -43,7 +38,7 @@ export const useManyStore = defineStore({
       Loading.show();
       this.documents = [];
       api
-        .get("/advertisements")
+        .get("/api/ingatlan")
         .then((res) => {
           Loading.hide();
           if (res?.data) {
@@ -55,102 +50,11 @@ export const useManyStore = defineStore({
         });
     },
 
-    async GetById(): Promise<void> {
-      if (this.document?.id) {
-        Loading.show();
-        api
-          .get(`/advertisements/${this.document.id}`)
-          .then((res) => {
-            Loading.hide();
-            if (res?.data) {
-              this.document = res.data;
-              // store startig data to PATCH method:
-              Object.assign(this.documentOld, this.document);
-            }
-          })
-          .catch((error) => {
-            ShowErrorWithNotify(error);
-          });
-      }
-    },
-
-    async Filter(): Promise<void> {
-      if (appStore.filter) {
-        this.documents = [];
-        // Loading.show();
-        api
-          .get(`/advertisements?_expand=category&q=${appStore.filter}`)
-          .then((res) => {
-            // Loading.hide();
-            if (res?.data) {
-              this.documents = res.data;
-            }
-          })
-          .catch((error) => {
-            ShowErrorWithNotify(error);
-          });
-      }
-    },
-
-    async EditById(): Promise<void> {
-      if (this.document?.id) {
-        const diff: any = {};
-        // the diff object only stores changed fields:
-        Object.keys(this.document).forEach((k, i) => {
-          const newValue = Object.values(this.document)[i];
-          const oldValue = Object.values(this.documentOld)[i];
-          if (newValue != oldValue) diff[k] = newValue;
-        });
-        if (Object.keys(diff).length == 0) {
-          Notify.create({
-            message: "Nothing changed!",
-            color: "negative",
-          });
-        } else {
-          Loading.show();
-          api
-            .patch(`/advertisements/${this.document.id}`, diff)
-            .then((res) => {
-              Loading.hide();
-              if (res?.data?.id) {
-                this.GetAll(); // refresh dataN with read all data again from backend
-                Notify.create({
-                  message: `Document with id=${res.data.id} has been edited successfully!`,
-                  color: "positive",
-                });
-              }
-            })
-            .catch((error) => {
-              ShowErrorWithNotify(error);
-            });
-        }
-      }
-    },
-
-    async DeleteById(): Promise<void> {
-      if (this.document?.id) {
-        Loading.show();
-        api
-          .delete(`/advertisements/${this.document.id}`)
-          .then(() => {
-            Loading.hide();
-            this.GetAll(); // refresh dataN with read all data again from backend
-            Notify.create({
-              message: `Document with id=${this.document.id} has been deleted successfully!`,
-              color: "positive",
-            });
-          })
-          .catch((error) => {
-            ShowErrorWithNotify(error);
-          });
-      }
-    },
-
     async Create(): Promise<void> {
       if (this.document) {
         Loading.show();
         api
-          .post("/advertisements", this.document)
+          .post("/api/ujingatlan", this.document)
           .then((res) => {
             Loading.hide();
             if (res?.data) {

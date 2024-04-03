@@ -34,7 +34,7 @@ export const useOneStore = defineStore({
       Loading.show();
       this.documents = [];
       api
-        .get("/categories")
+        .get("/api/kategoriak")
         .then((res) => {
           Loading.hide();
           if (res?.data) {

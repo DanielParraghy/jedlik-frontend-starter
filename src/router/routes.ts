@@ -7,29 +7,9 @@ const routes: RouteRecordRaw[] = [
     children: [{ path: "", component: () => import("../pages/IndexPage.vue") }],
   },
   {
-    path: "/empty",
+    path: "/offers",
     component: () => import("../layouts/MainLayout.vue"),
-    children: [{ path: "", component: () => import("../pages/xEmptyPage.vue") }],
-  },
-  {
-    path: "/xtable",
-    component: () => import("../layouts/MainLayout.vue"),
-    children: [{ path: "", component: () => import("../pages/xTablePage.vue") }],
-  },
-  {
-    path: "/xcarousel",
-    component: () => import("../layouts/MainLayout.vue"),
-    children: [{ path: "", component: () => import("../pages/xCarouselPage.vue") }],
-  },
-  {
-    path: "/xcard",
-    component: () => import("../layouts/MainLayout.vue"),
-    children: [{ path: "", component: () => import("../pages/xCardPage.vue") }],
-  },
-  {
-    path: "/xhelp",
-    component: () => import("../layouts/MainLayout.vue"),
-    children: [{ path: "", component: () => import("../pages/xHelpPage.vue") }],
+    children: [{ path: "", component: () => import("../pages/OffersPage.vue") }],
   },
 
   // Always leave this as last one,
